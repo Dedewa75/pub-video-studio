@@ -1,6 +1,6 @@
 // Service worker : permet d'installer l'appli et de l'utiliser sans internet.
 // Stratégie : réseau d'abord (pour recevoir les mises à jour), sinon la copie en cache.
-const CACHE = 'pvs-v1';
+const CACHE = 'pvs-v2';
 const FILES = ['./', 'index.html', 'style.css', 'manifest.json', 'js/metiers.js', 'js/music.js', 'js/mp4.js', 'js/engine.js', 'js/app.js', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {

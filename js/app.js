@@ -203,6 +203,7 @@
       adresse: $('f_adresse').value, insta: $('f_insta').value, cta: $('f_cta').value.trim() || 'Contactez-nous',
       accent: $('f_accent').value, music: $('f_music').value,
       photos: state.photos.map((p) => p.img), logo: state.logo ? state.logo.img : null, logoRemoveWhite: $('f_logoWhite').checked,
+      demo: $('f_demo').checked, demoLabel: $('signature').value.trim(),
     };
   }
 
@@ -235,7 +236,7 @@
     const items = [];
     for (let i = 0; i < state.count; i++) {
       const el = document.createElement('div'); el.className = 'res';
-      el.innerHTML = `<h3>Vidéo ${i + 1}</h3><div class="prog"><i></i></div><div class="state">En attente…</div>`;
+      el.innerHTML = `<h3>Vidéo ${i + 1}${D.demo ? ' – DÉMO' : ''}</h3><div class="prog"><i></i></div><div class="state">En attente…</div>`;
       box.appendChild(el); items.push(el);
     }
     for (let i = 0; i < state.count; i++) {
@@ -245,7 +246,7 @@
         const project = await VideoEngine.build(D, i);
         const t0 = performance.now();
         const blob = await VideoEngine.renderMp4(project, (p) => { bar.style.width = (p * 100).toFixed(0) + '%'; });
-        const url = URL.createObjectURL(blob), name = `${slug(D.nom)}_video${i + 1}.mp4`;
+        const url = URL.createObjectURL(blob), name = `${slug(D.nom)}_video${i + 1}${D.demo ? '_DEMO' : ''}.mp4`;
         el.querySelector('.prog').remove();
         st.remove();
         el.insertAdjacentHTML('beforeend', `<video src="${url}" controls playsinline></video><div class="actions"><a class="btn primary" href="${url}" download="${name}">⬇ Télécharger</a></div><div class="state">${(blob.size / 1e6).toFixed(1)} Mo – ${((performance.now() - t0) / 1000).toFixed(0)} s</div>`);

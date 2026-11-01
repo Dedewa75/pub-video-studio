@@ -263,6 +263,26 @@
     g.addColorStop(0, rgba(accent, 0.32)); g.addColorStop(1, rgba(accent, 0));
     x.fillStyle = g; x.fillRect(0, 0, W, H); return c;
   }
+  function watermark(label) {
+    const c = mkCanvas(W, H), x = c.getContext('2d');
+    // motif diagonal répété sur toute l'image (difficile à recadrer)
+    x.save(); x.translate(W / 2, H / 2); x.rotate(-Math.PI / 7);
+    x.font = font(900, 64); x.letterSpacing = '6px'; x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.fillStyle = 'rgba(255,255,255,0.16)'; x.strokeStyle = 'rgba(0,0,0,0.10)'; x.lineWidth = 2;
+    const txt = label, step = x.measureText(txt).width + 120;
+    for (let row = -12, k = 0; row <= 12; row++, k++) {
+      for (let col = -4; col <= 4; col++) {
+        const px = col * step + (k % 2 ? step / 2 : 0), py = row * 190;
+        x.strokeText(txt, px, py); x.fillText(txt, px, py);
+      }
+    }
+    x.restore();
+    // bandeau en haut
+    x.fillStyle = 'rgba(0,0,0,0.55)'; x.fillRect(0, 70, W, 74);
+    x.font = font(800, 34); x.letterSpacing = '4px'; x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.fillStyle = 'rgba(255,255,255,0.92)'; x.fillText('APERÇU • VERSION DÉMO', W / 2, 108);
+    return c;
+  }
   function contactCard(D) {
     const rows = [['📞', D.phone], ['✉️', D.email], ['🌐', D.site], ['📍', D.adresse]].filter((r) => r[1] && r[1].trim());
     const cw = 900, head = 125, rowH = 112, ch = head + 40 + Math.max(rows.length, 1) * rowH;
@@ -353,6 +373,7 @@
     const logo = D.logo ? prepLogo(D.logo, D.logoRemoveWhite) : badgeLogo(D.nom, D.accent, D.emoji);
     const contact = contactCard(D);
     const VIG = vignette(), BG = darkBg(D.accent), P = makeParticles(v);
+    const WM = D.demo ? watermark(D.demoLabel ? 'DÉMO • ' + D.demoLabel.toUpperCase() : 'DÉMO') : null;
     const mirror = v % 2 ? -1 : 1;
     const slogan = D.slogans[v % D.slogans.length];
     const bgStyle = v % 2 ? 'rays' : 'grid';
@@ -550,6 +571,7 @@
       S[sc.name](ctx, t, tg);
       ctx.restore();
       ctx.drawImage(VIG, 0, 0);
+      if (WM) ctx.drawImage(WM, 0, 0);
       // flash blanc
       if (idx > 0 && t < 0.2) { ctx.fillStyle = `rgba(255,255,255,${Math.pow(1 - t / 0.2, 2) * 0.85})`; ctx.fillRect(0, 0, W, H); }
       // fondu début / fin
