@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pub Vidéo Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><span class="dot"></span> PUB VIDÉO <b>STUDIO</b></div>
+    <nav class="steps" id="steps">
+      <button data-step="1" class="active">1. Métier</button>
+      <button data-step="2">2. Message client</button>
+      <button data-step="3">3. Création</button>
+      <button data-step="4">4. Vidéos</button>
+    </nav>
+  </header>
+
+  <div id="warn" class="warn hidden"></div>
+
+  <main>
+    <!-- ÉTAPE 1 -->
+    <section id="step1" class="step">
+      <h1>Quel est le métier du client ?</h1>
+      <input id="search" class="search" type="search" placeholder="Rechercher un métier… (ex. coiffure, garage)">
+      <div id="grid" class="grid"></div>
+      <div class="autre">
+        <span>Pas dans la liste ?</span>
+        <input id="autreNom" type="text" placeholder="Tape le métier (ex. Paysagiste, Serrurier…)">
+        <button id="autreBtn" class="btn">Utiliser ce métier</button>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 2 -->
+    <section id="step2" class="step hidden">
+      <h1>Message à envoyer au client <span id="m2" class="pill"></span></h1>
+      <div class="row">
+        <label>Ton prénom (signature) <input id="signature" type="text" placeholder="Nathan"></label>
+        <label>Prénom du client (facultatif) <input id="clientPrenom" type="text" placeholder="Marc"></label>
+      </div>
+      <textarea id="brief" rows="22"></textarea>
+      <div class="actions">
+        <button id="copyBtn" class="btn">📋 Copier le message</button>
+        <a id="waBtn" class="btn" target="_blank" rel="noopener">💬 Envoyer par WhatsApp</a>
+        <a id="mailBtn" class="btn">✉️ Envoyer par e-mail</a>
+        <button class="btn primary" data-go="3">J'ai les infos → Créer la vidéo</button>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 3 -->
+    <section id="step3" class="step hidden">
+      <h1>Création <span id="m3" class="pill"></span></h1>
+      <div class="cols">
+        <div class="col">
+          <h2>🏢 Entreprise</h2>
+          <label>Nom de l'entreprise * <input id="f_nom" type="text" placeholder="Ex. Fortis Bâti"></label>
+          <label>Accroche sous le nom <input id="f_tag" type="text"></label>
+          <div class="row">
+            <label>Slogan – ligne 1 <input id="f_s1" type="text"></label>
+            <label>Slogan – ligne 2 (surlignée) <input id="f_s2" type="text"></label>
+          </div>
+
+          <h2>✅ Services (jusqu'à 5)</h2>
+          <div id="f_services"></div>
+
+          <h2>🎁 Offre</h2>
+          <div class="row">
+            <label>Ligne 1 <input id="f_o1" type="text"></label>
+            <label>Ligne 2 (surlignée) <input id="f_o2" type="text"></label>
+          </div>
+
+          <h2>📊 Chiffres (facultatif)</h2>
+          <p class="hint">Valeur affichée (ex. « +250 », « 15 ans », « 4,9★ ») et légende. Laisse vide pour ne pas l'afficher.</p>
+          <div id="f_stats"></div>
+
+          <h2>📞 Contact</h2>
+          <div class="row">
+            <label>Téléphone <input id="f_phone" type="text" placeholder="0470 12 34 56"></label>
+            <label>E-mail <input id="f_email" type="text" placeholder="contact@entreprise.be"></label>
+          </div>
+          <div class="row">
+            <label>Site web <input id="f_site" type="text" placeholder="www.entreprise.be"></label>
+            <label>Instagram / Facebook <input id="f_insta" type="text" placeholder="@entreprise"></label>
+          </div>
+          <label>Adresse / zone <input id="f_adresse" type="text" placeholder="Rue …, 7000 Mons"></label>
+          <label>Texte du bouton final <input id="f_cta" type="text" placeholder="DEMANDEZ VOTRE DEVIS"></label>
+        </div>
+
+        <div class="col">
+          <h2>📸 Photos (1 à 6) *</h2>
+          <label class="drop" id="dropPhotos">
+            <input id="f_photos" type="file" accept="image/*" multiple hidden>
+            <span>Clique ou glisse les photos ici</span>
+          </label>
+          <div id="thumbs" class="thumbs"></div>
+          <p class="hint">L'ordre compte : 1ʳᵉ = grande photo d'accroche. Utilise ◀ ▶ pour changer l'ordre.</p>
+
+          <h2>🎨 Logo (facultatif)</h2>
+          <label class="drop small" id="dropLogo">
+            <input id="f_logo" type="file" accept="image/*" hidden>
+            <span id="logoLabel">Ajouter le logo</span>
+          </label>
+          <label class="check"><input id="f_logoWhite" type="checkbox" checked> Retirer le fond blanc du logo</label>
+          <p class="hint">Sans logo, l'appli crée un badge avec les initiales.</p>
+
+          <h2>🎵 Style</h2>
+          <div class="row">
+            <label>Couleur principale <input id="f_accent" type="color" value="#FF9F1A"></label>
+            <label>Musique
+              <select id="f_music">
+                <option value="energy">Énergique (house)</option>
+                <option value="urban">Urbaine (trap)</option>
+                <option value="chill">Chill (douce)</option>
+                <option value="luxe">Chic (piano)</option>
+              </select>
+            </label>
+          </div>
+
+          <h2>🎬 Nombre de vidéos</h2>
+          <div class="count" id="count">
+            <button data-n="1" class="active">1</button><button data-n="2">2</button><button data-n="3">3</button><button data-n="4">4</button><button data-n="5">5</button>
+          </div>
+          <p class="hint">Chaque vidéo est différente : ordre des photos, slogan, animations, fond et musique.</p>
+
+          <div class="actions">
+            <button id="previewBtn" class="btn">▶ Aperçu (version 1)</button>
+            <button id="genBtn" class="btn primary">🎬 Générer les vidéos</button>
+          </div>
+          <div id="formMsg" class="msg"></div>
+          <div class="preview-wrap hidden" id="previewWrap">
+            <canvas id="previewCanvas"></canvas>
+            <button id="stopPreview" class="btn">■ Arrêter</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 4 -->
+    <section id="step4" class="step hidden">
+      <h1>Tes vidéos</h1>
+      <p class="hint">Garde cet onglet ouvert pendant la fabrication (environ 20 à 60 s par vidéo selon ton PC).</p>
+      <div id="results" class="results"></div>
+      <div class="actions"><button class="btn" data-go="3">← Revenir à la création</button></div>
+    </section>
+  </main>
+
+  <script src="js/metiers.js"></script>
+  <script src="js/music.js"></script>
+  <script src="js/mp4.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
